@@ -1,0 +1,689 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>С 8 Марта, любимая мама!</title>
+    <!-- Подключаем шрифт Montserrat через Fontsource -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,600;0,700;1,300&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        font-family: "Montserrat", sans-serif;
+        background-color: #fdfbf7;
+        color: #4a4a4a;
+        overflow-x: hidden;
+      }
+
+      h1,
+      h2,
+      h3 {
+        font-family: "Playfair Display", serif;
+      }
+
+      .hero-bg {
+        background-image: url("images/2025-10-22\ 00.04.56.JPG");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+      }
+
+      .photo-card {
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease;
+      }
+
+      .photo-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Анимация появления при скролле */
+      .reveal {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.8s ease-out;
+      }
+
+      .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .heart-beat {
+        animation: beat 1.5s infinite;
+      }
+
+      @keyframes beat {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+      /* --- Стили для Слайдера (замените старые этим блоком) --- */
+      .slider-container {
+        padding-bottom: 80px;
+        position: relative;
+        margin: 20px auto;
+        overflow: hidden;
+        border-radius: 1rem;
+        box-shadow:
+          0 20px 25px -5px rgba(0, 0, 0, 0.1),
+          0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        background: #fff;
+      }
+
+      #horizontal-slider {
+        max-width: 800px;
+
+        height: 500px;
+      }
+
+      #vertical-slider {
+        max-width: 550px;
+        aspect-ratio: 4/5;
+      }
+
+      .slider-track {
+        display: flex;
+        transition: transform 0.5s ease-in-out;
+        height: 100%;
+      }
+
+      .slide {
+        min-width: 100%;
+        height: 100%;
+        position: relative;
+      }
+
+      .slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+
+      /* ОБЩИЙ СТИЛЬ ДЛЯ КНОПОК (теперь по классам) */
+      .prev-btn,
+      .next-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(255, 255, 255, 0.8);
+        border: none;
+        width: 45px; /* Немного увеличил для удобства */
+        height: 45px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s;
+        z-index: 20; /* Поднял выше, чтобы не перекрывались */
+        color: #db2777;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .prev-btn:hover,
+      .next-btn:hover {
+        background: white;
+        transform: translateY(-50%) scale(1.1);
+      }
+
+      /* Расставляем их по бокам */
+      .prev-btn {
+        left: 20px;
+      }
+      .next-btn {
+        right: 20px;
+      }
+      .slide-caption {
+        text-align: center;
+      }
+      .slider-controls {
+        position: relative;
+        margin: 20px auto 0;
+        bottom: auto;
+        left: auto;
+        justify-content: center;
+        transform: none;
+        display: flex;
+        align-items: center; /* Центрируем точку и кнопку паузы по вертикали */
+        gap: 12px;
+        z-index: 20;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 8px 16px;
+        border-radius: 20px;
+        backdrop-filter: blur(4px);
+        width: fit-content;
+      }
+      .dots-container {
+        display: flex;
+        gap: 8px;
+      }
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #ddd;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+
+      .dot.active {
+        background: #db2777;
+      }
+
+      .pause-btn {
+        background: transparent;
+        border: 1px solid #db2777;
+        color: #db2777;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body class="antialiased">
+    <!-- Hero Section -->
+    <header class="hero-bg h-screen flex items-center justify-center relative">
+      <div class="absolute inset-0 bg-white/40 backdrop-blur-[2px]"></div>
+      <div class="relative z-10 text-center px-4 reveal">
+        <h1
+          class="text-5xl md:text-7xl font-bold text-pink-900 mb-6 drop-shadow-sm"
+        >
+          С 8 Марта, <br />
+          любимая мама!
+        </h1>
+        <p
+          class="text-xl md:text-2xl text-pink-800 font-light italic max-w-2xl mx-auto"
+        >
+          Ты — самый яркий цветок в моем саду жизни.
+        </p>
+        <div class="mt-12">
+          <svg
+            class="w-10 h-10 text-pink-600 mx-auto animate-bounce"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M16.707 10.293a1 1 0 010 1.414l-6 6a1 1 0 01-1.414 0l-6-6a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l4.293-4.293a1 1 0 011.414 0z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+        </div>
+      </div>
+    </header>
+
+    <!-- Gallery Section (Slider) -->
+    <section class="py-20 bg-pink-200 overflow-hidden">
+      <div class="text-center mb-6 reveal">
+        <h2 class="text-4xl font-bold text-gray-800 mb-4">Наши моменты</h2>
+        <div class="w-24 h-1 bg-pink-400 mx-auto rounded-full"></div>
+        <p class="text-2xl text-gray-600 mt-8">
+          Листай твои лучшие воспоминания
+        </p>
+      </div>
+      <!-- Slider Container -->
+      <div class="slider-container" id="horizontal-slider">
+        <div class="slider-track">
+          <!-- Слайд 1 -->
+          <div class="slide">
+            <!-- ВСТАВЬ ССЫЛКУ НА ФОТО В src -->
+            <img src="images/2014-12-31 19.02.06.JPG" alt="Момент 1" />
+            <div class="slide-caption">Первая фотография на мой новый телефон. Приблизительно 2016 год
+            </div>
+          </div>
+
+          <!-- Слайд 2 -->
+          <div class="slide">
+            <!-- ВСТАВЬ ССЫЛКУ НА ФОТО В src -->
+            <img src="images/2016-06-30 15.29.57.JPG" alt="Момент 2" />
+            <div class="slide-caption">Фотография на ГЭС. 30 июня 2016 год</div>
+          </div>
+
+          <!-- Слайд 3 -->
+          <div class="slide">
+            <!-- ВСТАВЬ ССЫЛКУ НА ФОТО В src -->
+            <img src="images/2018-02-27 16.10.30.JPG" alt="Момент 3" />
+            <div class="slide-caption">Леша и Анушка в гостях у бабули. 27 февраля 2018 год</div>
+          </div>
+
+          <!-- Слайд 4 (Пример добавления еще одного) -->
+          <div class="slide">
+            <!-- ВСТАВЬ ССЫЛКУ НА ФОТО В src -->
+            <img src="images/2023-07-30 19.58.54.jpg" alt="Момент 4" />
+            <div class="slide-caption">Приезд Алексея после 1 курса. 30 июля 2023 год</div>
+          </div>
+
+          <div class="slide">
+            <!-- ВСТАВЬ ССЫЛКУ НА ФОТО В src -->
+            <img src="images/2025-10-22 00.45.17.JPG" alt="Момент 5" />
+            <div class="slide-caption">Мамуля красотуля в театре. Приблизительно 2000 год</div>
+          </div>
+
+          <div class="slide">
+            <!-- ВСТАВЬ ССЫЛКУ НА ФОТО В src -->
+            <img src="images/2026-03-07 23.26.53.JPG" alt="Момент 6" />
+            <div class="slide-caption">Мамулик где-то в лесу. Приблизительно честно даже не знаю </div>
+          </div>
+
+          <div class="slide">
+            <!-- ВСТАВЬ ССЫЛКУ НА ФОТО В src -->
+            <img src="images/2025-04-11 16.21.48.JPG" alt="Момент 7" />
+            <div class="slide-caption">Мамуля с бобриками в аквакомплексе Лужники. 11 апреля 2025 год </div>
+          </div>
+
+          <div class="slide">
+            <!-- ВСТАВЬ ССЫЛКУ НА ФОТО В src -->
+            <img src="images/2025-04-12 13.46.56.jpg" alt="Момент 8" />
+            <div class="slide-caption">Барбосики в ГУМе. 12 апреля 2025 год </div>
+          </div>
+
+          <div class="slide">
+            <!-- ВСТАВЬ ССЫЛКУ НА ФОТО В src -->
+            <img src="images/2023-12-17 08.41.53.jpg" alt="Момент 9" />
+            <div class="slide-caption">Мамочка везет меня в школу. 17 декабря 2023 год </div>
+          </div>
+
+          <div class="slide">
+            <!-- ВСТАВЬ ССЫЛКУ НА ФОТО В src -->
+            <img src="images/2024-06-26 15.28.22.jpg" alt="Момент 10" />
+            <div class="slide-caption">Мой выпускной, мама королева. 26 июня 2024 год </div>
+          </div>
+
+          
+        </div>
+
+        <!-- Кнопки навигации -->
+        <button class="prev-btn" aria-label="Назад">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+        </button>
+        <button class="next-btn" aria-label="Вперед">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
+        </button>
+
+        <!-- Индикаторы и пауза -->
+        <div class="slider-controls">
+          <div class="dots-container">
+            <!-- Точки генерируются JS -->
+          </div>
+          <button class="pause-btn">Пауза</button>
+        </div>
+      </div>
+      <p class="text-2xl text-gray-600 mt-8 text-center mb-6 reveal">
+        Ты главная опора нашей большой семьи
+      </p>
+
+      <!-- Gallery Section (Slider) -->
+      <div class="text-center mb-6 reveal">
+        <p class="mt-4 text-gray-600"></p>
+      </div>
+      <!-- Slider Container -->
+      <div class="slider-container" id="vertical-slider">
+        <div class="slider-track">
+          <!-- Слайд 1 -->
+          <div class="slide">
+            <!-- ВСТАВЬ ССЫЛКУ НА ФОТО В src -->
+            <img src="images/2023-06-02 18.10.15.PNG" alt="Момент 1" />
+            <div class="slide-caption">Самые теплые воспоминания</div>
+          </div>
+
+          <!-- Слайд 2 -->
+          <div class="slide">
+            <!-- ВСТАВЬ ССЫЛКУ НА ФОТО В src -->
+            <img src="images/2023-06-11 08.01.43.jpg" alt="Момент 2" />
+            <div class="slide-caption">Твоя улыбка освещает всё</div>
+          </div>
+
+          <!-- Слайд 3 -->
+          <div class="slide">
+            <!-- ВСТАВЬ ССЫЛКУ НА ФОТО В src -->
+            <img src="images/2023-07-22 13.50.42.jpg" alt="Момент 3" />
+            <div class="slide-caption">Вместе мы сила</div>
+          </div>
+
+          <!-- Слайд 4 (Пример добавления еще одного) -->
+          <div class="slide">
+            <!-- ВСТАВЬ ССЫЛКУ НА ФОТО В src -->
+            <img src="images/2025-08-09 14.42.07.JPG" alt="Момент 4" />
+            <div class="slide-caption">Счастливые минуты</div>
+          </div>
+
+          <div class="slide">
+            <!-- ВСТАВЬ ССЫЛКУ НА ФОТО В src -->
+            <img src="images/2023-08-27 14.45.20.jpg" alt="Момент 5" />
+            <div class="slide-caption">Счастливые минуты</div>
+          </div>
+        </div>
+
+        <!-- Кнопки навигации -->
+        <button class="prev-btn" aria-label="Назад">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+        </button>
+        <button class="next-btn" aria-label="Вперед">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
+        </button>
+
+        <!-- Индикаторы и пауза -->
+        <div class="slider-controls">
+          <div class="dots-container">
+            <!-- Точки генерируются JS -->
+          </div>
+          <button class="pause-btn">Пауза</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Letter Section -->
+    <section class="bg-pink-50 py-20 px-4 relative overflow-hidden">
+      <!-- Декоративные элементы -->
+      <div
+        class="absolute top-0 right-0 w-64 h-64 bg-pink-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 -translate-y-1/2 translate-x-1/2"
+      ></div>
+      <div
+        class="absolute bottom-0 left-0 w-64 h-64 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 translate-y-1/2 -translate-x-1/2"
+      ></div>
+
+      <div
+        class="max-w-3xl mx-auto bg-white/80 backdrop-blur-sm p-8 md:p-12 rounded-2xl shadow-xl relative z-10 reveal"
+      >
+        <div class="text-center mb-8">
+          <span class="text-5xl">💌</span>
+        </div>
+        <h2
+          class="text-3xl md:text-4xl font-bold text-center text-pink-900 mb-8"
+        >
+          Мамочка, спасибо тебе
+        </h2>
+
+        <div
+          class="prose prose-lg prose-pink mx-auto text-gray-700 leading-relaxed space-y-4"
+        >
+          <p>
+            В этот особенный день я хочу сказать тебе самое главное: спасибо.
+            Спасибо за твои бессонные ночи, за твою бесконечную веру в меня, за
+            твои теплые объятия, которые лечат любые раны.
+          </p>
+          <p>
+            Ты научила меня быть добрым, сильным и честным. Ты — мой пример, моя
+            поддержка и мой лучший друг. Я горжусь тем, что я твой ребенок.
+          </p>
+          <p>
+            Пусть эта весна принесет тебе столько же радости, сколько ты даришь
+            мне каждый день. Будь здорова, счастлива и любима. Ты заслуживаешь
+            всего самого лучшего в этом мире.
+          </p>
+          <p class="text-right font-bold mt-8 text-pink-800">
+            С любовью, <br />
+            Твой ребенок
+          </p>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="py-20 bg-pink-200 overflow-hidden">
+      <div class="text-center  reveal">
+        <h2 class="text-4xl font-bold text-gray-800 mb-4">
+          Момент гордости моих любимых родителей
+        </h2>
+        <div class="w-24 h-1 bg-pink-400 mx-auto rounded-full"></div>
+        <p class="text-xl text-gray-600 mt-6">
+          
+        </p>
+      </div>
+
+      <div class="max-w-4xl mx-auto px-4 reveal">
+        <div
+          class="video-container relative pb-[56.25%] h-0 rounded-2xl overflow-hidden shadow-xl bg-black"
+        >
+          <video
+            class="absolute top-0 left-0 w-full h-full object-cover"
+            controls
+            preload="metadata"
+            poster="images/2023-01-09 16.33.42.jpg"
+          >
+            <source src="videos/2024-06-30 10.24.48.MOV" type="video/mp4" />
+            Ваш браузер не поддерживает видео.
+          </video>
+        </div>
+
+        <p class="text-center text-gray-500 mt-4 text-sm">
+          Включите обязательно звук!
+        </p>
+      </div>
+    </section>
+
+
+    <section class=" bg-pink-200 overflow-hidden">
+      <div class="text-center mb-10 reveal">
+        <h2 class="text-4xl font-bold text-gray-800 mb-4">
+          И немного юмора ...
+        </h2>
+        <div class="w-24 h-1 bg-pink-400 mx-auto rounded-full"></div>
+        <p class="text-xl text-gray-600 mt-6">
+          
+        </p>
+      </div>
+
+      <div class="max-w-4xl mx-auto px-4 reveal">
+        <div
+          class="video-container relative pb-[56.25%] h-0 rounded-2xl overflow-hidden shadow-xl bg-black"
+        >
+          <video
+            class="absolute top-0 left-0 w-full h-full object-cover"
+            controls
+            preload="metadata"
+            poster="images/image.png"
+          >
+            <source src="videos/177290502369ac623f808b5.mp4" type="video/mp4" />
+            Ваш браузер не поддерживает видео.
+          </video>
+        </div>
+
+        <p class="text-center text-gray-500 mt-4 text-sm">
+          Включите обязательно звук!
+        </p>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white py-10 text-center border-t border-pink-100">
+      <div class="flex justify-center items-center space-x-2 mb-4">
+        <span class="text-pink-500 text-2xl heart-beat">❤️</span>
+      </div>
+      <p class="text-gray-500 text-sm">
+        Сделано с любовью специально для Анны Грибуновой, лучшей мамы на свете
+      </p>
+      <p class="text-gray-400 text-xs mt-2">8 Марта 2026</p>
+    </footer>
+
+    <script>
+      // Анимация появления при скролле
+      function reveal() {
+        var reveals = document.querySelectorAll(".reveal");
+        for (var i = 0; i < reveals.length; i++) {
+          var windowHeight = window.innerHeight;
+          var elementTop = reveals[i].getBoundingClientRect().top;
+          var elementVisible = 150;
+          if (elementTop < windowHeight - elementVisible) {
+            reveals[i].classList.add("active");
+          }
+        }
+      }
+      window.addEventListener("scroll", reveal);
+      reveal();
+
+      // Находим все контейнеры слайдеров на странице
+      const allSliders = document.querySelectorAll(".slider-container");
+
+      allSliders.forEach((slider) => {
+        // Ищем элементы ТОЛЬКО внутри текущего слайдера (используем slider.querySelector)
+        const track = slider.querySelector(".slider-track");
+        const slides = Array.from(track.children);
+        const nextBtn = slider.querySelector(".next-btn");
+        const prevBtn = slider.querySelector(".prev-btn");
+        const dotsContainer = slider.querySelector(".dots-container");
+        const pauseBtn = slider.querySelector(".pause-btn");
+
+        let currentIndex = 0;
+        let isPaused = false;
+        let slideInterval;
+        const slideTime = 2500;
+
+        // Создаем точки навигации для конкретного слайдера
+        slides.forEach((_, index) => {
+          const dot = document.createElement("div");
+          dot.classList.add("dot");
+          if (index === 0) dot.classList.add("active");
+          dot.addEventListener("click", () => {
+            goToSlide(index);
+            resetTimer();
+          });
+          dotsContainer.appendChild(dot);
+        });
+
+        const dots = Array.from(dotsContainer.children);
+
+        function updateDots() {
+          dots.forEach((dot) => dot.classList.remove("active"));
+          if (dots[currentIndex]) dots[currentIndex].classList.add("active");
+        }
+
+        function goToSlide(index) {
+          if (index < 0) {
+            currentIndex = slides.length - 1;
+          } else if (index >= slides.length) {
+            currentIndex = 0;
+          } else {
+            currentIndex = index;
+          }
+
+          const amountToMove = -currentIndex * 100;
+          track.style.transform = `translateX(${amountToMove}%)`;
+          updateDots();
+        }
+
+        function nextSlide() {
+          if (!isPaused) {
+            goToSlide(currentIndex + 1);
+          }
+        }
+
+        function startTimer() {
+          clearInterval(slideInterval); // очистка на всякий случай
+          slideInterval = setInterval(nextSlide, slideTime);
+          if (pauseBtn) pauseBtn.textContent = "Пауза";
+          isPaused = false;
+        }
+
+        function stopTimer() {
+          clearInterval(slideInterval);
+          if (pauseBtn) pauseBtn.textContent = "Старт";
+          isPaused = true;
+        }
+
+        function resetTimer() {
+          if (!isPaused) {
+            stopTimer();
+            startTimer();
+          }
+        }
+
+        // Слушатели кнопок (теперь они привязаны к конкретному слайдеру)
+        nextBtn.addEventListener("click", () => {
+          goToSlide(currentIndex + 1);
+          resetTimer();
+        });
+
+        prevBtn.addEventListener("click", () => {
+          goToSlide(currentIndex - 1);
+          resetTimer();
+        });
+
+        if (pauseBtn) {
+          pauseBtn.addEventListener("click", () => {
+            if (isPaused) startTimer();
+            else stopTimer();
+          });
+        }
+
+        // Пауза при наведении именно на этот слайдер
+        slider.addEventListener("mouseenter", stopTimer);
+        slider.addEventListener("mouseleave", () => {
+          if (pauseBtn && pauseBtn.textContent === "Пауза") startTimer();
+          else if (!pauseBtn) startTimer();
+        });
+
+        // Запуск таймера для этого слайдера
+        startTimer();
+      });
+    </script>
+  </body>
+</html>
